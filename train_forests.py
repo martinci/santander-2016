@@ -91,7 +91,7 @@ def eval_classification(Y_test, Y_pred, print_results = False):
     f1 = 2*(prec*recall)/(prec + recall) # F1 score
     auc = roc_auc_score(Y_test, Y_pred)  # Area under the ROC curve.
     if print_results:
-        print(cm,[["TP", "FP"], ["FN", "TP"]])
+        print(cm)
         print("Misclassification error:", miss)
         print("Recall (Sensitivity):", recall)
         print("Specificity:", spec)
@@ -114,7 +114,7 @@ if __name__ == "__main__":
     
     print("Data successfully loaded!")
     print("Training Forests...")
-    with open("cross-val.txt",'a') as f:
+    with open("cross-validation/cross-val.txt",'a') as f:
         # Tune the ranges here for parameter training.
         for a, w, N_forest, n_trees in  product([0.25], [1], range(60, 61, 10), range(100, 501, 50)):
             rfs = trainForests(train, a, w, N_forest, n_trees)

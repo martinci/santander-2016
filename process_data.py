@@ -36,3 +36,14 @@ def process(data):
     # We assume it is the country and categorize the variable as 0 being domestic (which corresponds to the value 2) and 1 for international or unknown.
     process_country(data)
     
+def create_submission(test_id, Y_prob):
+    ver = 1
+    while True:
+        try:
+            open('submissions/rforest_ensemble{}.csv'.format(ver), 'x')
+            break
+        except:
+            ver+=1
+    path = 'submissions/rforest_ensemble{}.csv'.format(ver)
+    pd.DataFrame({"ID": test_id, "TARGET": Y_prob}).to_csv(path, index=False, mode='w')
+    print("The submission file is " + path)

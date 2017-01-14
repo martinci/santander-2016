@@ -91,8 +91,7 @@ def eval_classification(Y_test, Y_pred, print_results = False):
     f1 = 2*(prec*recall)/(prec + recall) # F1 score
     auc = roc_auc_score(Y_test, Y_pred)  # Area under the ROC curve.
     if print_results:
-        print(cm)
-        print("TN={}, FP={}, FN={}, TP={}".format(tn,fp,fn,tp))
+        print(cm,[["TP", "FP"], ["FN", "TP"]])
         print("Misclassification error:", miss)
         print("Recall (Sensitivity):", recall)
         print("Specificity:", spec)

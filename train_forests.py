@@ -114,14 +114,14 @@ if __name__ == "__main__":
     
     print("Data successfully loaded!")
     print("Training Forests...")
-    with open("cross-validation/cross-val.txt",'a') as f:
-        # Tune the ranges here for parameter training.
-        for a, w, N_forest, n_trees in  product([0.25], [1], range(60, 61, 10), range(100, 501, 50)):
-            rfs = trainForests(train, a, w, N_forest, n_trees)
-            Y_prob = mean_ensemble(rfs, X_test)
-            #scores = eval_classification(test.ix[:,-1], Y_pred)
-            score = roc_auc_score(test.ix[:,-1],Y_prob)
-            f.write("a={}, w={}, N_forest={}, n_trees={} --> {}\n".format(a, w, N_forest, n_trees, score))
-            count+= 1
-            print("Total ensembles trained: {}\nLast ensemble trained: a={}, w={}, N_forests={}, n_trees={} --> {}".format(count, a, w, N_forest, n_trees, score), flush = True)
+    # Tune the ranges here for parameter training.
+    for a, w, N_forest, n_trees in  product([0.25], [1], range(60, 61, 10), range(100, 501, 50)):
+        rfs = trainForests(train, a, w, N_forest, n_trees)
+        Y_prob = mean_ensemble(rfs, X_test)
+        #scores = eval_classification(test.ix[:,-1], Y_pred)
+        score = roc_auc_score(test.ix[:,-1],Y_prob)
+        temp = [{'a': a, 'w': w, 'N_forest': N_forest, 'n_trees': n_trees, 'auc_roc': score}]
+        pd.DataFrame(temp).to_csv("cross-validation/cross-val.csv", header=False, index=False, mode='a')
+        count+= 1
+        print("Total ensembles trained: {}\nLast ensemble trained: a={}, w={}, N_forests={}, n_trees={} --> {}".format(count, a, w, N_forest, n_trees, score), flush = True)
     print("Training completed!.")

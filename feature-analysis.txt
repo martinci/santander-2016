@@ -1,0 +1,28 @@
+THINGS WE KNOW:
+
+0) Initially, there are 76020 observations and 371 features. Including the target.  The data is highly skewed. There are 96.04% of happy observations and 3.96% of unhappy observations.
+
+1) 'var3' most likely represents country. It has a value -999,999 for .015% of the observations. Conjecture it is NA. Replace it by 2 (most frequent obs. -> domestic). The analysis indicates that replacing by 2 might be bad. Namely, the non 2 (international customers) seem to be happier than average.
+Alternative: Just replace the value by -1 as unclassified.
+
+2) 'var15' may represent age of the customer. Caveat, it seems heavily biased towards young (20s), which doesn't match the demographic analysis. Alternatively, could represent the age of the relation with the bank.
+Upshot: the 'older' the unhappier.
+
+3) In general, this is a sparse data set where most of the entries (90.67%) are zero. Further, there are  features (36) that are always 0 both in the trainning and test data sets. These can be safely dropped.
+
+4) By the name of the features, there are some underlying assets called 'var' + {some number} and the features contain information about them. Eg. we have 'ind_var40', 'ind_var40_0', 'num_40', 'num_op_var40_hace2', 'imp_op_var40_comer_ult1', 'saldo_var40', etc.
+    *) The start of the names give extra information about the nature of the features: 'ind' means indicator variable (categorical), 'num' means a count, 'saldo' means balence, etc. These come from the corresponding spanish translations.
+Idea: consider adding new features: total # of assets hold, total balance, etc.
+
+        POSSIBLE MODEL: LOOK AT TOTAL NUMBERS, DROP INDIVIDUAL ONES.
+        
+Additionally, there some variables that are totally correlated. Eg. 'ind_40' is totally correlated with 'num_var40' ( 3 * num_40 = ind_var40). We conjecture this is the same for other var{}. The rationale behind this is: ind_var{} indicates wether a client has the var{} asset or not; num_var{} indicates the number of units of asset var{}.
+
+5) 'var38' is very correlated with with the target (according xgboost). It has a special value (117310.979016) which a lot of values are set to. A simple analysis, reveals that this is the mean of the rest of values so most likely this is the result of a fillna using mean type of command.
+After applying log to this variable withouth the na values, it follows a normal-like distribution.
+
+6) Exploration of ind-type variables: 'ind _var18' and 'ind_var18_0' are duplicates. List of duplicates = [18, 25, 26, 32, 34, 37, 13_medio]. 
+ind_var29 and ind_var29_0 have only a combined 8 non-zero values. However, when both 29 and 29_0 are 1 then the customer is unhappy.
+
+ind_var13* has special indicators corto, medio, largo. Further analysis is required. 
+

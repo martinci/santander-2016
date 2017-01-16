@@ -1,12 +1,25 @@
 import pandas as pd
 import numpy as np
 
+
+class DataProcess:
+
+    def __init__(self):
+        self.to_drop = []
+
+    def processTrain():
+        pass
+        
+    def processTest(self,test):
+        pass
+
+
 def drop_columns(data, names):
     for name in names:
-        data.drop(name, axis = 1, inplace = True)
-
-def log_transform(data):
-    pass
+        try:
+            data.drop(name, axis = 1, inplace = True)
+        except:
+            continue
     
 def process_country(data):
     for i in data.index:
@@ -29,12 +42,15 @@ def process(data):
     columns_to_drop+= zero_columns
     # We drop all the features above.
     drop_columns(data, columns_to_drop)
-
+    data.rename(columns={'saldo_var13_medio': 'saldo_medio_var13'}, inplace=True)
     #var38 and the saldo variables have a log-normal distribution
     data['var38'] = data['var38'].apply(np.log)
     # var2 has some strange values -999999 that don't fit the rest of the data.
     # We assume it is the country and categorize the variable as 0 being domestic (which corresponds to the value 2) and 1 for international or unknown.
     process_country(data)
+
+def extra_process(data):
+    pass
     
 def create_submission(test_id, Y_prob):
     ver = 1

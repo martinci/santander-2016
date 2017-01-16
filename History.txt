@@ -1,0 +1,17 @@
+1) Feature cleaning and transforming.
+   Duplicate features, constant features.
+
+2) Random Forest -> poor performance roc_auc ~0.52 (on test data)
+   Problem: Unbalanced data set. Only ~3-4% of observations are unhappy
+
+3) To deal with unbalance, undersampling of the majority class. Randomly sample as many happy observations as the total number of unhappy observations.
+   Performance boost -> ~0.77 (on test data)
+   Problem: overfitting.
+   
+4) To deal with overfitting, sample a fraction of the unhappy class (25%) and complete with as many happy observations. Train multiple random forests with thise method (60) and ensemble the results in a majority vote. Performance boost -> ~0.82 (on test data)
+
+5) Used more forests (90) but with less trees (150). Instead of majority vote, we used mean of predicted probabilities. Performance boost -> ~.83
+
+6) Use geometric mean improved a little bit.
+
+7) Creating mean_balance, mean_mean_balance, sum_zeros, num_assets improved performance -> ~.84

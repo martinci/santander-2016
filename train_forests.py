@@ -34,14 +34,20 @@ def generate_split(data0, data1, a, w=1):
 # Given an array of binary classifiers, this function computes the mean of the positive class probabilities.
 #   rfs: array of binary classifiers.
 #   X_test: test data to predict.
-#   return --> array of mean probabilities for the positive class.
+#   return --> data frame of predicted probabilities, last two columns are arithmetic mean and geometric mean.
 def mean_ensemble(rfs, X_test):
+    l = len(rfs)
     df = pd.DataFrame()
     for i, rf in enumerate(rfs):
         temp = rfs[i].predict_proba(X_test)
         Y_pred = pd.DataFrame(temp)[1]
-        df = pd.concat([df,Y_pred], axis = 1)
-    return df.mean(axis = 1)
+        df = pd.concat([df, Y_pred], axis=1, ignore_index=True)
+    temp1 = df.mean(axis=1) # arithmetic mean
+    temp2 = df.product(axis=1)
+    temp2 = temp2.apply(lambda x: np.power(x, 1./l))# geometric mean
+    df['arithmetic'] = temp1
+    df['geometric'] = temp2
+    return df
 
 
 # This function trains a number of random forest classifiers with specified

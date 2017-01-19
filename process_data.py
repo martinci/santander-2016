@@ -48,6 +48,15 @@ def process(data):
     # var2 has some strange values -999999 that don't fit the rest of the data.
     # We assume it is the country and categorize the variable as 0 being domestic (which corresponds to the value 2) and 1 for international or unknown.
     process_country(data)
+    
+    # New feature counting zero entries. It represents the customer activity.
+    original_features = data.columns[:-1]
+    data.insert(len(original_features),'SumZeros',(data[original_features] == 0).sum(axis=1))
+
+    # New feature describing the number of assets.
+    asset_features = [name for name in data.columns if 'ind' in name]
+    temp = data[asset_features].sum(axis=1)
+    data.insert(data.shape[1]-1, 'NumAssets', temp)
 
 def extra_process(data):
     pass

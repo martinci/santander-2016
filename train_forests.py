@@ -58,19 +58,20 @@ def mean_ensemble(rfs, X_test):
 #   N_forest: total number of random forest classifiers to train.
 #   n_trees: the number of trees for each forest (can be an array to
 #            specify different # of trees for different forests).
+#   msl: corresonds to the parameter min_samples_leaf.
 #   return --> array of trained random forest classifiers.
-def trainForests(data, a, w, N_forest, n_trees):
+def trainForests(data, a=1, w=1, N_forest=1, n_trees=100, msl=1):
     rfs = []
     data0, data1 = data[data.ix[:,-1]==0], data[data.ix[:,-1]==1]
     if isinstance(n_trees, list):
         for i in range(N_forest):
-            temp =  RandomForestClassifier(n_trees[i])
+            temp =  RandomForestClassifier(n_estimators = n_trees[i], min_samples_leaf = msl)
             X_train, Y_train = generate_split(data0, data1, a, w)
             temp.fit(X_train, Y_train)
             rfs.append(temp)
     else:
         for i in range(N_forest):
-            temp =  RandomForestClassifier(n_trees)
+            temp =  RandomForestClassifier(n_trees, min_samples_leaf = msl)
             X_train, Y_train = generate_split(data0, data1, a, w)
             temp.fit(X_train, Y_train)
             rfs.append(temp)        
